@@ -14,27 +14,25 @@ protocol MainCoordinatorProtocol: Coordinator {
 final class MainCoordinator: MainCoordinatorProtocol {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
+    var dependencies: MainDependenciesResolver
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(dependencies: MainDependenciesResolver) {
+        self.dependencies = dependencies
+        self.navigationController = dependencies.resolve()
     }
     
     func start() {
-        Task {
-            await MainActor.run {
-                let builder = MainBuilder(coordinator: self)
-                navigationController.pushViewController(builder.build(), animated: true)
-            }
-        }
+        let controller: MainViewController = dependencies.resolve()
+        navigationController.pushViewController(controller, animated: true)
     }
     
     func navigateTo(_ userType: UserType) {
         switch userType {
         case .customer:
-            let coordinator = CustomerCoordinator(navigationController: navigationController)
+            let coordinator: CustomerCoordinatorProtocol = dependencies.resolve()
             coordinator.start()
         case .business:
-            let coordinator = BusinessCoordinator(navigationController: navigationController)
+            let coordinator: BusinessCoordinatorProtocol = dependencies.resolve()
             coordinator.start()
         }
     }

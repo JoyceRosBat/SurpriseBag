@@ -8,9 +8,6 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
-    var viewModel: MainViewModel
-    
     lazy var businessButton: GrayButton = {
         let button = GrayButton()
         button.setTitle("Business", for: .normal)
@@ -41,8 +38,12 @@ class MainViewController: UIViewController {
         return stackView
     }()
     
-    init(viewModel: MainViewModel) {
-        self.viewModel = viewModel
+    var viewModel: MainViewModel
+    var dependencies: MainDependenciesResolver
+    
+    init(dependencies: MainDependenciesResolver) {
+        self.dependencies = dependencies
+        self.viewModel = dependencies.resolve()
         super.init(nibName: nil, bundle: nil)
     }
     

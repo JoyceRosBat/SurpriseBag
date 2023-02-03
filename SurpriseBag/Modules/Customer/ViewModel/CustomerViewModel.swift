@@ -8,11 +8,13 @@
 import Foundation
 
 final class CustomerViewModel {
+    var dependencies: CustomerDependenciesResolver
+    var coordinator: CustomerCoordinatorProtocol {
+        dependencies.resolve()
+    }
     
-    var coordinator: CustomerCoordinatorProtocol
-    
-    init(coordinator: CustomerCoordinatorProtocol) {
-        self.coordinator = coordinator
+    init(dependencies: CustomerDependenciesResolver) {
+        self.dependencies = dependencies
     }
     
     func goToLogin() {

@@ -15,25 +15,23 @@ protocol LoginCoordinatorProtocol: Coordinator {
 final class LoginCoordinator: LoginCoordinatorProtocol {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
+    let dependencies: LoginDependenciesResolver
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(dependencies: LoginDependenciesResolver) {
+        self.dependencies = dependencies
+        self.navigationController = dependencies.resolve()
     }
     
     func start() {
-        Task {
-            await MainActor.run {
-                let builder = LoginBuilder(coordinator: self)
-                navigationController.pushViewController(builder.build(), animated: true)
-            }
-        }
+        let controller: LoginViewController = dependencies.resolve()
+        navigationController.pushViewController(controller, animated: true)
     }
     
     func goToMainScreen() {
-        
+        print("Go to main screen")
     }
     
     func forgotPassword() {
-        
+        print("Go to forgot password")
     }
 }

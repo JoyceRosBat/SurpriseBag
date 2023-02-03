@@ -8,10 +8,13 @@
 import Foundation
 
 final class MainViewModel {
-    var coordinator: MainCoordinatorProtocol
+    var dependencies: MainDependenciesResolver
+    var coordinator: MainCoordinatorProtocol {
+        dependencies.resolve()
+    }
     
-    init(coordinator: MainCoordinatorProtocol) {
-        self.coordinator = coordinator
+    init(dependencies: MainDependenciesResolver) {
+        self.dependencies = dependencies
     }
     
     func navigateTo(_ userType: UserType) {

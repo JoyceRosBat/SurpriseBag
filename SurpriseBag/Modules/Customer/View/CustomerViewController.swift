@@ -8,9 +8,6 @@
 import UIKit
 
 class CustomerViewController: UIViewController {
-
-    var viewModel: CustomerViewModel
-    
     lazy var button: GrayButton = {
         let button = GrayButton()
         button.setTitle("Login", for: .normal)
@@ -21,8 +18,12 @@ class CustomerViewController: UIViewController {
         return button
     }()
     
-    init(viewModel: CustomerViewModel) {
-        self.viewModel = viewModel
+    var dependencies: CustomerDependenciesResolver
+    var viewModel: CustomerViewModel
+    
+    init(dependencies: CustomerDependenciesResolver) {
+        self.dependencies = dependencies
+        self.viewModel = dependencies.resolve()
         super.init(nibName: nil, bundle: nil)
     }
     

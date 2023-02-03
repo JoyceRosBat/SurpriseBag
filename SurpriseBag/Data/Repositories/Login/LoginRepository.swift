@@ -8,7 +8,13 @@
 import Foundation
 
 final class LoginRepository: LoginRepositoryProtocol {
-    let networkRequester = Requester()
+    let dependencies: LoginDependenciesResolver
+    let networkRequester: Requester
+    
+    init(dependencies: LoginDependenciesResolver) {
+        self.dependencies = dependencies
+        self.networkRequester = dependencies.resolve()
+    }
     
     func validate(_ username: String?, _ password: String?) async throws -> Bool {
         let request = LoginRequest.validate(username, password)

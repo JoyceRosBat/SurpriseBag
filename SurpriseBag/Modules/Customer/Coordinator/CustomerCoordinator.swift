@@ -14,22 +14,20 @@ protocol CustomerCoordinatorProtocol: Coordinator {
 final class CustomerCoordinator: CustomerCoordinatorProtocol {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
+    let dependencies: CustomerDependenciesResolver
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(dependencies: CustomerDependenciesResolver) {
+        self.dependencies = dependencies
+        self.navigationController = dependencies.resolve()
     }
     
     func start() {
-        Task {
-            await MainActor.run {
-                let builder = CustomerBuilder(coordinator: self)
-                navigationController.pushViewController(builder.build(), animated: true)
-            }
-        }
+        let controller: CustomerViewController = dependencies.resolve()
+        navigationController.pushViewController(controller, animated: true)
     }
     
     func goToLogin() {
-        let coordinator = LoginCoordinator(navigationController: navigationController)
+        let coordinator: LoginCoordinatorProtocol = dependencies.resolve()
         coordinator.start()
     }
 }

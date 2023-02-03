@@ -8,9 +8,12 @@
 import Foundation
 
 final class TestBusinessViewModel {
-    var coordinator: BusinessCoordinatorProtocol
+    let dependencies: BusinessDependenciesResolver
+    var coordinator: BusinessCoordinatorProtocol {
+        dependencies.resolve()
+    }
     
-    init(coordinator: BusinessCoordinatorProtocol) {
-        self.coordinator = coordinator
+    init(dependencies: BusinessDependenciesResolver) {
+        self.dependencies = dependencies
     }
 }

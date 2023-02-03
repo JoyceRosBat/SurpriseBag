@@ -9,16 +9,19 @@ import Foundation
 
 final class LoginViewModel {
     
-    var repository: LoginRepositoryProtocol
-    var coordinator: LoginCoordinatorProtocol
+    let dependencies: LoginDependenciesResolver
+    var useCase: LoginUseCaseProtocol {
+        dependencies.resolve()
+    }
+    var coordinator: LoginCoordinatorProtocol {
+        dependencies.resolve()
+    }
     
     @Published var usernameTitle = "Introduce tu username:"
     @Published var passwordTitle = "Introduce tu password:"
     
-    init(repository: LoginRepositoryProtocol,
-         coordinator: LoginCoordinatorProtocol) {
-        self.repository = repository
-        self.coordinator = coordinator
+    init(dependencies: LoginDependenciesResolver) {
+        self.dependencies = dependencies
     }
     
     func viewDidLoad() {
@@ -28,7 +31,7 @@ final class LoginViewModel {
     func doLogin(_ username: String?, _ password: String?) {
         Task {
             print(username, ", ", password)
-            if try await repository.validate(username, password) {
+            if try await useCase.validate(username, password) {
                 coordinator.goToMainScreen()
             }
         }

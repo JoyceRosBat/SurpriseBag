@@ -9,10 +9,12 @@ import UIKit
 
 class TestBusinessViewController: UIViewController {
     
+    let dependencies: BusinessDependenciesResolver
     var viewModel: TestBusinessViewModel
     
-    init(viewModel: TestBusinessViewModel) {
-        self.viewModel = viewModel
+    init(dependencies: BusinessDependenciesResolver) {
+        self.dependencies = dependencies
+        self.viewModel = dependencies.resolve()
         super.init(nibName: nil, bundle: nil)
     }
     

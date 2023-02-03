@@ -9,8 +9,6 @@ import UIKit
 
 class BusinessViewController: UIViewController {
     
-    var viewModel: BusinessViewModel
-    
     lazy var button: GrayButton = {
         let button = GrayButton()
         button.setTitle("Test", for: .normal)
@@ -21,8 +19,12 @@ class BusinessViewController: UIViewController {
         return button
     }()
     
-    init(viewModel: BusinessViewModel) {
-        self.viewModel = viewModel
+    let dependencies: BusinessDependenciesResolver
+    var viewModel: BusinessViewModel
+    
+    init(dependencies: BusinessDependenciesResolver) {
+        self.dependencies = dependencies
+        self.viewModel = dependencies.resolve()
         super.init(nibName: nil, bundle: nil)
     }
     

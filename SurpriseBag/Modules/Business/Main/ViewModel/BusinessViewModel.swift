@@ -9,10 +9,13 @@ import Foundation
 
 final class BusinessViewModel {
     
-    var coordinator: BusinessCoordinatorProtocol
+    let dependencies: BusinessDependenciesResolver
+    var coordinator: BusinessCoordinatorProtocol {
+        dependencies.resolve()
+    }
     
-    init(coordinator: BusinessCoordinatorProtocol) {
-        self.coordinator = coordinator
+    init(dependencies: BusinessDependenciesResolver) {
+        self.dependencies = dependencies
     }
     
     func gotoTest() {

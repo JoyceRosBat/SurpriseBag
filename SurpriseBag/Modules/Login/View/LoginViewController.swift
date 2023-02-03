@@ -15,11 +15,13 @@ class LoginViewController: UIViewController {
         return view
     }()
     
+    let dependencies: LoginDependenciesResolver
     var subscriptions = Set<AnyCancellable>()
     var viewModel: LoginViewModel
     
-    init(viewModel: LoginViewModel) {
-        self.viewModel = viewModel
+    init(dependencies: LoginDependenciesResolver) {
+        self.dependencies = dependencies
+        self.viewModel = dependencies.resolve()
         super.init(nibName: nil, bundle: nil)
     }
     
